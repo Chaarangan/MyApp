@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './question.dart';
+import './answer.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -6,17 +8,41 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  void answerQuestion() {
-    print('Answer');
+class MyApp extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  var _questionIndex = 0;
+
+  void _answerQuestion() {
+    setState(() {
+      _questionIndex = _questionIndex + 1;
+    });
+    print(_questionIndex);
   }
 
   @override //make our code bit clear
   Widget build(BuildContext context) {
-    var questions = [
-      'What\'s your favourite color?',
-      'What\'s your favourite animal?'
+    final questions = [
+      {
+        'questionText': 'What\'s your favourite color?',
+        'answers': ['Black', 'Green', 'White', 'Yellow'],
+      },
+      {
+        'questionText': 'What\'s your favourite animal?',
+        'answers': ['Dog', 'Cat', 'Lion'],
+      },
+      {
+        'questionText': 'What\'s your favourite food?',
+        'answers': ['Pittu', 'Rice', 'Noodels'],
+      },
     ];
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -24,19 +50,11 @@ class MyApp extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Text('The question'),
-            RaisedButton(
-              child: Text('Answer 01'),
-              onPressed: answerQuestion,
-            ),
-            RaisedButton(
-              child: Text('Answer 02'),
-              onPressed: answerQuestion,
-            ),
-            RaisedButton(
-              child: Text('Answer 03'),
-              onPressed: answerQuestion,
-            ),
+            Question(questions[_questionIndex]['questionText']),
+            ...(questions[_questionIndex]['answers'] as List<String>)
+                .map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList()
           ],
         ),
       ),
